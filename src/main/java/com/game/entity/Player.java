@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "player", schema = "rpg")
+
 public class Player {
     @Id
     @GeneratedValue
