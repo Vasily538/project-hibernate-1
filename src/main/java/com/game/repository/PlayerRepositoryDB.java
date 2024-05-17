@@ -1,19 +1,15 @@
 package com.game.repository;
 
 import com.game.entity.Player;
-import com.sun.java.swing.plaf.windows.TMSchema;
-import jakarta.persistence.NamedQueries;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
-import jakarta.annotation.PreDestroy;
-
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 
 @Repository(value = "db")
 @org.hibernate.annotations.NamedQuery(
