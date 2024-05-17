@@ -1,10 +1,8 @@
 package com.game.entity;
 
-//import jakarta.persistence.*;
-import org.hibernate.persister.entity.
-//import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
-//import javax.persistence.NamedQuery;
+
 @Entity
 @Table(name = "player", schema = "rpg")
 @NamedQuery(
