@@ -6,24 +6,23 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PreDestroy;
+import javax.persistence.NamedQuery;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
 @Repository(value = "db")
-@org.hibernate.annotations.NamedQuery(
-        name = "Player_GetAllCount",
-        query = "select count(*) from Player"
-)
 public class PlayerRepositoryDB implements IPlayerRepository {
     private final SessionFactory sessionFactory;
 
     public PlayerRepositoryDB() {
         Properties properties = new Properties();
-        properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+        properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
+        properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, "jdbc:mysql://localhost:3306/rpg");
         properties.put(Environment.USER, "root");
         properties.put(Environment.PASS, "Point007");
@@ -32,6 +31,7 @@ public class PlayerRepositoryDB implements IPlayerRepository {
 
         sessionFactory = new Configuration()
                 .setProperties(properties)
+                .addAnnotatedClass(com.game.entity.Player.class)
                 .buildSessionFactory();
 
     }
@@ -39,17 +39,23 @@ public class PlayerRepositoryDB implements IPlayerRepository {
     @Override
     public List<Player> getAll(int pageNumber, int pageSize) {
 
-        return sessionFactory.openSession()
-                .createNativeQuery("select * from player ", Player.class)
+        Session session = sessionFactory.openSession();
+
+        Query<Player> query = session.createNativeQuery("select * from player ", Player.class)
                 .setFirstResult(pageNumber * pageSize)
-                .setMaxResults(pageSize)
-                .list();
+                .setMaxResults(pageSize);
+
+        List<Player> resultList = query.list();
+        return resultList;
     }
 
     @Override
     public int getAllCount() {
-        return sessionFactory.openSession().createNamedQuery("Player_GetAllCount", Integer.class)
-                .uniqueResult();
+        Session session = sessionFactory.openSession();
+       // Query<Integer> query = session.createNamedQuery(Player.Player_Get_All_Count, Integer.class);
+        Query query = session.createNamedQuery(Player.Player_Get_All_Count);
+        int count = (Integer)query.uniqueResult();
+        return count;
     }
 
     @Override

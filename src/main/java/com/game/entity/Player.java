@@ -1,31 +1,36 @@
 package com.game.entity;
 
-import jakarta.persistence.*;
-
+//import jakarta.persistence.*;
+import org.hibernate.persister.entity.
+//import javax.persistence.*;
 import java.util.Date;
-
+//import javax.persistence.NamedQuery;
 @Entity
 @Table(name = "player", schema = "rpg")
-
+@NamedQuery(
+        name = Player.Player_Get_All_Count,
+        query = "select count(*) from Player"
+)
 public class Player {
+    public static final String Player_Get_All_Count = "Player_GetAllCount";
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name",length = 12,nullable = false)
+    @Column(name = "name", length = 12, nullable = false)
     private String name;
-    @Column(name = "title",length = 30,nullable = false)
+    @Column(name = "title", length = 30, nullable = false)
     private String title;
-    @Column(name = "race",nullable = false)
+    @Column(name = "race", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Race race;
-    @Column(name = "profession",nullable = false)
+    @Column(name = "profession", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Profession profession;
-    @Column(name = "birthday",nullable = false)
+    @Column(name = "birthday", nullable = false)
     private Date birthday;
-    @Column(name = "banned",nullable = false)
+    @Column(name = "banned", nullable = false, columnDefinition = "TINYINT", length = 1)
     private Boolean banned;
-    @Column(name = "level",nullable = false)
+    @Column(name = "level", nullable = false)
     private Integer level;
 
     public Player() {
