@@ -5,11 +5,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 @Repository(value = "db")
 @org.hibernate.annotations.NamedQuery(
@@ -20,8 +22,18 @@ public class PlayerRepositoryDB implements IPlayerRepository {
     private final SessionFactory sessionFactory;
 
     public PlayerRepositoryDB() {
+        Properties properties = new Properties();
+        properties.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
+        properties.put(Environment.URL, "jdbc:mysql://localhost:3306/rpg");
+        properties.put(Environment.USER, "root");
+        properties.put(Environment.PASS, "Point007");
+        properties.put(Environment.SHOW_SQL, "true");
+        properties.put(Environment.HBM2DDL_AUTO, "update");
+
         sessionFactory = new Configuration()
+                .setProperties(properties)
                 .buildSessionFactory();
+
     }
 
     @Override
